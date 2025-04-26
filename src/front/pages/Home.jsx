@@ -1,10 +1,18 @@
 import React, { useEffect } from "react"
 import rigoImageUrl from "../assets/img/rigo-baby.jpg";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { GetAllUsers } from "../services/fetchs.js";
 
 export const Home = () => {
 
 	const { store, dispatch } = useGlobalReducer()
+	const {users}=store
+	useEffect(() => {
+		GetAllUsers(dispatch)
+		
+	}, [dispatch])
+
+console.log({ users})
 
 	const loadMessage = async () => {
 		try {
@@ -47,6 +55,21 @@ export const Home = () => {
 					</span>
 				)}
 			</div>
+			<div>{
+				users && users.length > 0 ? (
+					<ul>
+						{users.map((user, index) => (
+							<li key={index}>
+								{user.name} - {user.email}
+							</li>
+						))}
+					</ul>
+				) : (
+					<span className="text-danger">
+						Loading users from the backend...
+					</span>
+				)
+				}</div>
 		</div>
 	);
 }; 
